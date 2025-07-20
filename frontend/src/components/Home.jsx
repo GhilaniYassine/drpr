@@ -1,9 +1,16 @@
-import { Routes, Route } from 'react-router';
-import React from 'react';
-const Home = () => {
-    return (
-        <div>This is the Home page</div>
-    )
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+
+
+function Home() {
+
+
+
+  return (
+<div>
+    <h1>Welcome to the Home Page</h1>
+</div>
+  );
 }
 
 export default Home;
