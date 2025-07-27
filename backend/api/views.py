@@ -23,7 +23,7 @@ class LeagueViewsets(viewsets.ViewSet):
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
 class CharacteristcViewsets(viewsets.ViewSet):
-    permisson = [permissions.AllowAny]
+    permissions = [permissions.AllowAny]
     queryset = Characteristc.objects.all()
     serializer_class = CharacteristcSerializer
     def list(self, request):#
@@ -36,6 +36,12 @@ class FootballClubViewsets(viewsets.ViewSet):
     permissions = [permissions.AllowAny]
     serializer_class = FootballClubSerializer
     queryset = FootballClub.objects.all()
+    
+    def list(self, request):
+        queryset = FootballClub.objects.all()
+        serializer = self.serializer_class(queryset, many=True)
+        return Response(serializer.data)
+        
     def create(self,request):
         serializer = self.serializer_class(data=request.data)   
         if serializer.is_valid():
