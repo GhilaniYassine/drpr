@@ -18,7 +18,7 @@ class CharacteristcSerializer(serializers.ModelSerializer):
         
 class FootballClubSerializer(serializers.ModelSerializer):
     class Meta :
-        model =Country
+        model =FootballClub
         fields = '__all__'
 
 

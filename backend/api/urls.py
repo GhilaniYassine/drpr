@@ -10,6 +10,4 @@ router.register('characteristc',CharacteristcViewsets,basename='characteristic')
 router.register('footballclub',FootballClubViewsets,basename='footballclub')
 
 
-
-
-urlpatterns = router.urls
+urlpatterns=router.urls
