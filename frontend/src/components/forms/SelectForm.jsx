@@ -1,32 +1,35 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import React from 'react';
+import { FormControl, InputLabel, MenuItem, Select, FormHelperText } from '@mui/material';
 
-export default function SelectForm({label, options,value,name,onChange,onBlur}) {
- 
-  return (
-      <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">{label}</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          label={label}
-          value = {value}
-          name = {name}
-          onChange = {onChange}
-          onBlur={onBlur}
-        >
+const SelectForm = ({ label, options = [], value, onChange, name, error, helperText, ...props }) => {
+    const id = React.useMemo(() => `${name}-select`, [name]);
 
-          {
-            options.map((option) =>(
-                <MenuItem value={option.id}>{option.name}</MenuItem>
-            ))
-          }
-          
-        </Select>
-      </FormControl>
-  );
+    return (
+        <FormControl fullWidth error={error}>
+            <InputLabel id={`${id}-label`}>{label}</InputLabel>
+            <Select
+                id={id}
+                labelId={`${id}-label`}
+                value={value}
+                label={label}
+                onChange={onChange}
+                name={name}
+                aria-describedby={helperText ? `${id}-helper-text` : undefined}
+                {...props}
+            >
+                {options.map((option) => (
+                    <MenuItem key={option.id} value={option.id}>
+                        {option.name}
+                    </MenuItem>
+                ))}
+            </Select>
+            {helperText && (
+                <FormHelperText id={`${id}-helper-text`}>
+                    {helperText}
+                </FormHelperText>
+            )}
+        </FormControl>
+    )
 }
+
+export default SelectForm;

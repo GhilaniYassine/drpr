@@ -1,20 +1,24 @@
-import * as React from 'react';
-import TextField from '@mui/material/TextField';
+import React from 'react';
+import { TextField } from '@mui/material';
 
-export default function DescriptionForm({label,rows,value,name,onChange,onBlur}) {
-  return (
+const DescriptionForm = ({ label, name, value, onChange, error, helperText, ...props }) => {
+    const id = React.useMemo(() => `${name}-textarea`, [name]);
+    
+    return (
         <TextField
-          id="outlined-multiline-static"
-          sx={{width:'100%'}}
-          label={label}
-          multiline
-          rows={rows}
-          value = {value}
-          name = {name}
-          onChange = {onChange}
-          onBlur={onBlur}
-          
+            id={id}
+            name={name}
+            label={label}
+            value={value}
+            onChange={onChange}
+            error={error}
+            helperText={helperText}
+            fullWidth
+            multiline
+            aria-describedby={helperText ? `${id}-helper-text` : undefined}
+            {...props}
         />
-      
-  );
+    )
 }
+
+export default DescriptionForm;

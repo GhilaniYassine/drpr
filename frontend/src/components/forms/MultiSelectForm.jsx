@@ -1,63 +1,70 @@
-import * as React from 'react';
-import { useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import Chip from '@mui/material/Chip';
+import { FormControl, InputLabel, MenuItem, Select, FormHelperText } from '@mui/material'
+import React from 'react'
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
+const MultiSelectForm = ({ 
+    label = "", 
+    options = [], 
+    value = [], 
+    onChange, 
+    name, 
+    error = false, 
+    helperText = "", 
+    ...props 
+}) => {
+    const id = React.useMemo(() => `${name}-select`, [name]);
+
+    // Ensure options is always an array and has valid structure
+    const safeOptions = React.useMemo(() => {
+        if (!options || !Array.isArray(options)) {
+            return [];
+        }
+        return options.filter(option => 
+            option && 
+            typeof option === 'object' && 
+            (option.id !== undefined && option.id !== null) &&
+            option.name
+        );
+    }, [options]);
+
+    // Ensure value is always an array
+    const safeValue = React.useMemo(() => {
+        if (!value) return [];
+        return Array.isArray(value) ? value : [];
+    }, [value]);
+
+    return (
+        <FormControl fullWidth error={error}>
+            <InputLabel id={`${id}-label`}>{label}</InputLabel>
+            <Select
+                id={id}
+                labelId={`${id}-label`}
+                multiple
+                value={safeValue}
+                label={label}
+                onChange={onChange}
+                name={name}
+                aria-describedby={helperText ? `${id}-helper-text` : undefined}
+                {...props}
+            >
+                {safeOptions.length > 0 ? (
+                    safeOptions.map((option) => (
+                        <MenuItem key={option.id} value={option.id}>
+                            {option.name}
+                        </MenuItem>
+                    ))
+                ) : (
+                    <MenuItem disabled value="">
+                        No options available
+                    </MenuItem>
+                )}
+            </Select>
+            {helperText && (
+                <FormHelperText id={`${id}-helper-text`}>
+                    {helperText}
+                </FormHelperText>
+            )}
+        </FormControl>
+    );
 };
 
-
-export default function MultiSelectForm({label,options,value,name,onChange,onBlur}) {
-  const theme = useTheme();
-
-  return (
-    <div>
-      <FormControl sx={{width:'100%' }}>
-        <InputLabel id="demo-multiple-chip-label">{label}</InputLabel>
-        <Select
-          labelId="demo-multiple-chip-label"
-          id="demo-multiple-chip"
-          multiple
-          value = {value}
-          name = {name}
-          onChange = {onChange}
-          onBlur={onBlur}
-          input={<OutlinedInput id="select-multiple-chip" label={label} />}
-          renderValue={(selected) => (
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-              {selected.map((value) => (
-                <Chip 
-                key={value} 
-                label={options.find(option => option.id===value)?.name} />
-              ))}
-            </Box>
-          )}
-          MenuProps={MenuProps}
-        >
-          {options.map((option) => (
-            <MenuItem
-              key={option.id}
-              value={option.id}
-            >
-              {option.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </div>
-  );
-}
-
+export default MultiSelectForm;

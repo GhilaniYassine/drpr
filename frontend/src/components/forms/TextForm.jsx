@@ -1,19 +1,24 @@
-import * as React from 'react';
-import TextField from '@mui/material/TextField';
+import React from 'react';
+import { TextField } from '@mui/material';
 
-export default function TextForm({label,value,name,onChange,onBlur}) {
-  return (
-      <TextField 
-            id="standard-basic" 
-            sx={{width:'100%'}}
+const TextForm = ({ label, name, value, onChange, error, helperText, ...props }) => {
+    const id = React.useMemo(() => `${name}-input`, [name]);
+    
+    return (
+        <TextField
+            id={id}
+            name={name}
             label={label}
-            variant="outlined"
-            value = {value}
-            name = {name}
-            onChange = {onChange}
-            onBlur={onBlur}
-            
+            value={value}
+            onChange={onChange}
+            error={error}
+            helperText={helperText}
+            fullWidth
+            aria-describedby={helperText ? `${id}-helper-text` : undefined}
+            autoComplete={name}
+            {...props}
         />
-   
-  );
+    )
 }
+
+export default TextForm;
